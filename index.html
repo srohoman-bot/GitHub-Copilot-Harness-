@@ -12,7 +12,9 @@
 <meta property="og:title" content="GitHub Copilot Harness 追悼式場 | R.I.P.">
 <meta property="og:description" content="GitHub Copilot Harness は Microsoft Copilot harness に改名しました。ろうそくを灯して、旧名を偲びましょう。">
 <meta property="og:url" content="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/assets/og.jpg">
 <link rel="canonical" href="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="style.css">
@@ -22,17 +24,17 @@
 <a class="skip" href="#main" data-i18n="skip">本文へ移動</a>
 <canvas id="sky" aria-hidden="true"></canvas>
 <div id="fx" class="fx" aria-hidden="true"></div>
-<div id="truck" class="truck" aria-hidden="true">🚛💨</div>
+<img id="truck" class="truck" src="assets/icon-truck.jpg" alt="" width="128" height="128" aria-hidden="true">
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <header class="top">
-  <span class="brand" data-i18n="brand">🕯 追悼式場</span>
+  <span class="brand"><img class="ico" src="assets/icon-candle.jpg" alt="" width="32" height="32"><span data-i18n="brand">追悼式場</span></span>
   <div class="ctrl">
     <div class="lang" role="group" aria-label="言語 / Language">
       <button id="lang-ja" type="button" lang="ja" aria-pressed="true">日本語</button>
       <button id="lang-en" type="button" lang="en" aria-pressed="false">English</button>
     </div>
-    <button id="sound" class="icon" type="button" aria-pressed="false" aria-label="お鈴の音 オン/オフ" data-i18n-attr="aria-label:sound_label"><span id="sound-ico" aria-hidden="true">🔇</span></button>
+    <button id="sound" class="icon" type="button" aria-pressed="false" aria-label="お鈴の音 オン/オフ" data-i18n-attr="aria-label:sound_label"><img id="sound-ico" src="assets/icon-bell-off.jpg" alt="" width="36" height="36" aria-hidden="true"></button>
   </div>
 </header>
 
@@ -104,14 +106,14 @@
       <article class="card">
         <h3 data-i18n="f_h">Press F to pay respects</h3>
         <p data-i18n="f_p">キーボードの F キーでも敬意を表せます。</p>
-        <div class="row"><button id="f-btn" class="btn big-f" type="button" aria-label="敬意を表す" data-i18n-attr="aria-label:f_btn_label">F</button></div>
+        <div class="row"><button id="f-btn" class="icon-btn" type="button" aria-label="敬意を表す" data-i18n-attr="aria-label:f_btn_label"><img src="assets/icon-f.jpg" alt="" width="96" height="96"></button></div>
         <p class="count"><span data-i18n="f_count">F数：</span> <b id="c-f">0</b></p>
       </article>
 
       <article class="card">
         <h3 data-i18n="koden_h">香典</h3>
         <p data-i18n="koden_p">1口 = 1,000,000 トークン。※請求は発生しません。</p>
-        <div class="row"><button id="koden-btn" class="btn" type="button">💴 <span data-i18n="koden_btn">香典を包む</span></button></div>
+        <div class="row"><button id="koden-btn" class="btn with-ico" type="button"><img class="ico" src="assets/icon-koden.jpg" alt="" width="32" height="32"><span data-i18n="koden_btn">香典を包む</span></button></div>
         <p class="count"><span data-i18n="koden_total">香典合計：</span> <b id="c-koden">0</b> tokens</p>
       </article>
     </div>

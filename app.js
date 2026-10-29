@@ -12,7 +12,7 @@
   const KEY = 'ghch.v1';
   const MAX_NOTES = 50, NAME_MAX = 24, MSG_MAX = 140, COOLDOWN_MS = 8000;
   const MAX_CANDLES = 7, ALTAR_MAX = 40, KODEN_UNIT = 1000000;
-  const FLOWERS = ['💐', '🌸', '🌼', '🌷', '🥀', '🍙', '🍵', '🍶'];
+  const FLOWERS = Array.from({ length: 8 }, (_, i) => `assets/flower-${i}.jpg`);
   const $ = (s) => document.querySelector(s);
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -20,7 +20,7 @@
   const EN = {
     title: 'GitHub Copilot Harness Memorial | R.I.P.',
     description: 'The GitHub Copilot harness is now the Microsoft Copilot harness. An unofficial parody memorial for the old name.',
-    skip: 'Skip to content', brand: '🕯 Memorial Hall', sound_label: 'Toggle temple bell sound',
+    skip: 'Skip to content', brand: 'Memorial Hall', sound_label: 'Toggle temple bell sound',
     eyebrow: 'OBITUARY  —  Passed away in 2026 due to a rename',
     dates: 'Birth unknown — 2026 (renamed)',
     epitaph: 'The name changed. The insides… probably did not.',
@@ -196,7 +196,7 @@
   $('#sound').addEventListener('click', () => {
     soundOn = !soundOn;
     $('#sound').setAttribute('aria-pressed', String(soundOn));
-    $('#sound-ico').textContent = soundOn ? '🔔' : '🔇';
+    $('#sound-ico').src = soundOn ? 'assets/icon-bell-on.jpg' : 'assets/icon-bell-off.jpg';
     toast(t(soundOn ? 'soundOn' : 'soundOff'));
     bell();
   });
@@ -285,9 +285,11 @@
   /* ---------- flowers / altar ---------- */
   const altar = $('#altar');
   function offerEl(i, drop) {
-    const s = document.createElement('span');
+    const s = document.createElement('img');
     s.className = drop ? 'offer' : 'offer still';
-    s.textContent = FLOWERS[i];
+    s.src = FLOWERS[i];
+    s.alt = '';
+    s.width = 44; s.height = 44;
     return s;
   }
   function renderAltar() {
@@ -297,7 +299,10 @@
   }
   const flowerBtns = FLOWERS.map((e, i) => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'flower-btn'; b.textContent = e;
+    b.type = 'button'; b.className = 'flower-btn';
+    const im = document.createElement('img');
+    im.src = e; im.alt = ''; im.width = 48; im.height = 48;
+    b.append(im);
     b.addEventListener('click', () => {
       state.flowers[i] = Math.min(state.flowers[i] + 1, 999);
       save();
