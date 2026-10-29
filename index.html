@@ -2,10 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://func-api-btxbrjzss7soa.azurewebsites.net; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
+<meta name="api-base" content="https://func-api-btxbrjzss7soa.azurewebsites.net">
 <title>GitHub Copilot Harness 追悼式場 | R.I.P.</title>
 <meta name="description" content="GitHub Copilot Harness は Microsoft Copilot harness に改名しました。旧名を偲ぶ、非公式パロディ追悼サイト。">
 <meta property="og:type" content="website">
@@ -57,6 +58,19 @@
     <p class="news"><span data-i18n="news_pre">死因：</span> <a href="https://www.microsoft.com/en-us/copilot/blog/" target="_blank" rel="noopener noreferrer">The GitHub Copilot harness is now the Microsoft Copilot harness | Microsoft Copilot Blog</a></p>
   </section>
 
+  <section id="stats" class="panel" aria-labelledby="stats-h">
+    <h2 id="stats-h" data-i18n="stats_h">みんなの追悼（累計）</h2>
+    <p id="net" class="net small" role="status" data-state="off"></p>
+    <div class="stats">
+      <div class="stat"><b id="g-visit">–</b><span data-i18n="st_visit">参列者</span></div>
+      <div class="stat"><b id="g-candle">–</b><span data-i18n="st_candle">灯されたろうそく</span></div>
+      <div class="stat"><b id="g-flower">–</b><span data-i18n="st_flower">お供え</span></div>
+      <div class="stat"><b id="g-f">–</b><span data-i18n="st_f">敬意（F）</span></div>
+      <div class="stat"><b id="g-koden">–</b><span data-i18n="st_koden">香典（トークン）</span></div>
+      <div class="stat"><b id="g-tribute">–</b><span data-i18n="st_tribute">弔辞</span></div>
+    </div>
+  </section>
+
   <section id="words" class="panel" aria-labelledby="words-h">
     <h2 id="words-h" data-i18n="words_h">最期の言葉</h2>
     <p class="lead" data-i18n="words_p">故人は最期に、ターミナルでこう打ったとされている。</p>
@@ -81,7 +95,7 @@
   <section id="offer" class="panel" aria-labelledby="offer-h">
     <h2 id="offer-h" data-i18n="offer_h">お供え</h2>
     <p class="lead" data-i18n="offer_p">ボタンを押して、旧名を偲びましょう。</p>
-    <p class="small" data-i18n="local_note">※ 記録はこの端末のブラウザ内にのみ保存されます。</p>
+    <p class="small" data-i18n="local_note">※ 各カード内の数字はあなたの分、上の「累計」はみんなの合計です。</p>
 
     <div class="grid">
       <article class="card">
@@ -121,7 +135,7 @@
 
   <section id="tribute" class="panel" aria-labelledby="tribute-h">
     <h2 id="tribute-h" data-i18n="tribute_h">弔辞を残す</h2>
-    <p class="lead" data-i18n="tribute_p">故人への言葉をどうぞ。投稿はこの端末のブラウザ内にのみ保存され、他の人には送信されません。</p>
+    <p class="lead" data-i18n="tribute_p">故人への言葉をどうぞ。弔辞は全員に公開されます。URL・連絡先・不適切な言葉は投稿できません。</p>
     <form id="tribute-form" class="form" autocomplete="off">
       <label for="t-name" data-i18n="name_label">お名前（任意）</label>
       <input id="t-name" type="text" maxlength="24" placeholder="匿名の参列者" data-i18n-attr="placeholder:name_ph">
@@ -133,7 +147,7 @@
       </div>
     </form>
     <h3 class="wall-h" data-i18n="wall_h">弔辞の壁</h3>
-    <p class="small" data-i18n="wall_note">※ 一部の弔辞はネタ（創作）です。</p>
+    <p class="small" data-i18n="wall_note">※ 実際の弔辞の下に並ぶのはネタ（創作）です。</p>
     <div id="wall" class="wall"></div>
   </section>
 
@@ -169,8 +183,8 @@
 
 <footer class="foot">
   <p data-i18n="foot_disclaimer">これは非公式のファンメイドによるパロディです。GitHub および Microsoft とは一切関係ありません。商標はそれぞれの所有者に帰属します。製品自体は健在で、変わったのは名前だけです。</p>
-  <p data-i18n="foot_security">Cookie・トラッカー・外部通信はありません（CSP で外部接続を遮断）。入力内容はあなたのブラウザの localStorage にのみ保存されます。</p>
-  <p><button id="reset" class="link" type="button" data-i18n="reset_btn">この端末の記録を消去する</button></p>
+  <p data-i18n="foot_security">Cookieやトラッカーは使いません。通信先はこのサイト専用の API（Azure）のみで、累計の数字と公開弔辞だけを保存します。IP アドレスは保存しません。個人のカウントはあなたのブラウザの localStorage にのみ保存されます。</p>
+  <p><button id="reset" class="link" type="button" data-i18n="reset_btn">この端末の個人記録を消去する</button></p>
 </footer>
 </body>
 </html>

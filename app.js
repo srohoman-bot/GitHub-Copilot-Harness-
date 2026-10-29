@@ -10,7 +10,8 @@
 
   const SITE_URL = 'https://srohoman-bot.github.io/GitHub-Copilot-Harness-/';
   const KEY = 'ghch.v1';
-  const MAX_NOTES = 50, NAME_MAX = 24, MSG_MAX = 140, COOLDOWN_MS = 8000;
+  const MAX_NOTES = 20, NAME_MAX = 24, MSG_MAX = 140, COOLDOWN_MS = 20000;
+  const FLUSH_MS = 5000, MAX_BATCH = 100, ID_RE = /^\d{13}-[0-9a-f]{6}$/;
   const MAX_CANDLES = 7, ALTAR_MAX = 40, KODEN_UNIT = 1000000;
   const FLOWERS = Array.from({ length: 8 }, (_, i) => `assets/flower-${i}.jpg`);
   const $ = (s) => document.querySelector(s);
@@ -34,23 +35,25 @@
     tl4_t: 'The Rename', tl4_p: 'One day, a blog post appeared: "Microsoft Copilot harness". The timeline knew before the harness did.',
     tl5_t: 'Today', tl5_p: 'Name changed, reins still held. The deceased is, in fact, alive.',
     offer_h: 'Offerings', offer_p: 'Press the buttons and remember the old name.',
-    local_note: '* Your records are stored only in this browser.',
+    local_note: '* Numbers inside each card are yours. The "All-time" numbers above are everyone\'s combined.',
     candle_h: 'Light a Candle', candle_p: 'Light candles for the old name. Up to 7.',
     candle_btn: 'Light', candle_off: 'Blow out', candle_count: 'Candles lit',
     flower_h: 'Flowers & Offerings', flower_p: 'Choose whatever you like.', altar_label: 'Offering altar', flower_count: 'Offerings',
     f_h: 'Press F to pay respects', f_p: 'You can also press the F key on your keyboard.', f_btn_label: 'Pay respects', f_count: 'Respects paid',
     koden_h: 'Condolence Gift', koden_p: '1 gift = 1,000,000 tokens. * You will not be billed.',
     koden_btn: 'Send a gift', koden_total: 'Total gifts',
-    tribute_h: 'Leave a Tribute', tribute_p: 'Write a few words. Posts are stored only in this browser and are not sent to anyone.',
+    stats_h: 'Everyone\'s Tributes (All-time)', st_visit: 'Mourners', st_candle: 'Candles lit', st_flower: 'Offerings',
+    st_f: 'Respects (F)', st_koden: 'Gifts (tokens)', st_tribute: 'Tributes',
+    tribute_h: 'Leave a Tribute', tribute_p: 'Write a few words. Tributes are public and visible to everyone. Links, contact details and offensive words are rejected.',
     name_label: 'Name (optional)', name_ph: 'Anonymous mourner', msg_label: 'Tribute', msg_ph: 'e.g. Thank you, GitHub Copilot Harness.',
-    send: 'Offer tribute', wall_h: 'Wall of Tributes', wall_note: '* Some tributes are jokes (made up).',
+    send: 'Offer tribute', wall_h: 'Wall of Tributes', wall_note: '* The ones below the real tributes are jokes (made up).',
     reborn_h: 'Reincarnation', reborn_p: 'Maybe the deceased has simply been reincarnated.',
     reborn_before: 'Here lies', reborn_after: 'Reincarnated as a Microsoft thing',
     reborn_btn: 'Reincarnate', reborn_back: 'Put back to rest',
     share_h: 'Spread the News', share_p: '#GitHubCopilotHarness #RIP', share_x: 'Post on X', share_copy: 'Copy link', share_native: 'Share…',
     foot_disclaimer: 'This is an unofficial, fan-made parody. Not affiliated with, endorsed by, or sponsored by GitHub or Microsoft. Trademarks belong to their respective owners. The product is alive and well; only the name changed.',
-    foot_security: 'No cookies, no trackers, no external requests (CSP blocks outbound connections). What you enter is stored only in your browser\'s localStorage.',
-    reset_btn: 'Erase my records on this device'
+    foot_security: 'No cookies and no trackers. The only network traffic is to this site\'s own API (Azure), which stores counters and public tributes. Your IP address is never stored. Personal counts stay in your browser\'s localStorage.',
+    reset_btn: 'Erase my personal records on this device'
   };
   const JA = {};
   const JA_ATTR = [];
@@ -72,8 +75,10 @@
       flower: ['花束', '桜', '黄色い花', 'チューリップ', '枯れた花', 'おにぎり', 'お茶', 'お酒'],
       fMilestone: (n) => `${n} 回、敬意が表されました`,
       koden: ['受領しました。請求書は発行されません。', '追加の香典、ありがとうございます。', 'トークンは故人が責任を持って使い切ります。'],
-      noteOk: '弔辞を受け付けました。', empty: '弔辞を入力してください。', fast: '少し間を置いてから投稿してください。',
-      anon: '匿名の参列者', you: 'あなた', del: '削除',
+      noteOk: '弔辞を受け付けました。', empty: '弔辞を入力してください。', fast: '少し間を置いてから投稿してください。',      rejected: 'URL・連絡先・不適切な言葉を含む弔辞は投稿できません。', dup: '同じ弔辞はすでに投稿されています。',
+      tributeFail: '投稿できませんでした。時間をおいてお試しください。', noServer: 'サーバーに接続できません。',
+      netLive: '● ライブ更新中', netOff: '○ オフライン（自分の分のみ反映）', netWait: '… 接続中',
+      now: 'たった今', wallEmpty: 'まだ弔辞がありません。最初の一人になりましょう。',      anon: '匿名の参列者', you: 'あなた', del: '削除',
       copied: 'リンクをコピーしました', copyFail: 'コピーできませんでした',
       quips: ['触らないでください。故人です。', 'Ctrl+Z を試しましたが、改名は取り消せませんでした。', 'ここに眠るのは名前だけです。', '中の人は元気です。', 'git blame したら、犯人は改名でした。', '墓石は意外と軽い。ハリボテです。'],
       share: 'GitHub Copilot Harness は Microsoft Copilot harness に改名しました。ここに追悼を。',
@@ -86,6 +91,10 @@
       fMilestone: (n) => `${n} respects paid`,
       koden: ['Received. No invoice will be issued.', 'Thank you for the additional gift.', 'The deceased will spend those tokens responsibly.'],
       noteOk: 'Your tribute has been received.', empty: 'Please write a tribute.', fast: 'Please wait a moment before posting again.',
+      rejected: 'Tributes with links, contact details or offensive words cannot be posted.', dup: 'That tribute was already posted.',
+      tributeFail: 'Could not post. Please try again later.', noServer: 'Cannot reach the server.',
+      netLive: '● Live', netOff: '○ Offline (showing only your own actions)', netWait: '… Connecting',
+      now: 'just now', wallEmpty: 'No tributes yet. Be the first.',
       anon: 'Anonymous mourner', you: 'You', del: 'Delete',
       copied: 'Link copied', copyFail: 'Could not copy',
       quips: ['Please do not touch. The deceased is resting.', 'Tried Ctrl+Z. The rename could not be undone.', 'Only the name is buried here.', 'The insides are fine.', 'git blame says: the rename did it.', 'The gravestone is surprisingly light. It is cardboard.'],
@@ -136,12 +145,9 @@
     ? Array.from(s.replace(CTRL, ' ').replace(/\s+/g, ' ').trim()).slice(0, max).join('')
     : '';
   const clampInt = (v, max) => (Number.isInteger(v) ? Math.min(Math.max(v, 0), max) : 0);
-  const cleanNote = (o) => {
-    if (!o || typeof o !== 'object') return null;
-    const m = clean(o.m, MSG_MAX);
-    return m ? { n: clean(o.n, NAME_MAX), m } : null;
-  };
-  const defaults = (lang) => ({ lang, candles: 0, flowers: FLOWERS.map(() => 0), f: 0, koden: 0, notes: [] });
+  const cleanMine = (o) => (o && typeof o === 'object' && ID_RE.test(o.id) && typeof o.token === 'string' && /^[\w-]{10,40}$/.test(o.token)
+    ? { id: o.id, token: o.token } : null);
+  const defaults = (lang) => ({ lang, candles: 0, flowers: FLOWERS.map(() => 0), f: 0, koden: 0, visited: false, mine: [] });
 
   function load() {
     const s = defaults('ja');
@@ -155,7 +161,8 @@
       if (Array.isArray(o.flowers)) s.flowers = FLOWERS.map((_, i) => clampInt(o.flowers[i], 999));
       s.f = clampInt(o.f, 999999);
       s.koden = clampInt(o.koden, 999999);
-      if (Array.isArray(o.notes)) s.notes = o.notes.slice(0, MAX_NOTES).map(cleanNote).filter(Boolean);
+      s.visited = o.visited === true;
+      if (Array.isArray(o.mine)) s.mine = o.mine.slice(0, MAX_NOTES).map(cleanMine).filter(Boolean);
     } catch (_) { /* corrupted or blocked storage */ }
     return s;
   }
@@ -278,7 +285,7 @@
   }
   $('#candle-btn').addEventListener('click', () => {
     if (state.candles >= MAX_CANDLES) { toast(t('max')); return; }
-    state.candles++; save(); renderCounts(); bell();
+    state.candles++; save(); renderCounts(); bell(); queue('candle');
   });
   $('#candle-off').addEventListener('click', () => { state.candles = 0; save(); renderCounts(); });
 
@@ -309,6 +316,7 @@
       altar.append(offerEl(i, true));
       while (altar.children.length > ALTAR_MAX) altar.firstChild.remove();
       renderCounts();
+      queue('flowers', i);
     });
     $('#flower-btns').append(b);
     return b;
@@ -317,7 +325,7 @@
   /* ---------- F / koden ---------- */
   const fx = $('#fx');
   function payRespects() {
-    state.f = Math.min(state.f + 1, 999999); save(); renderCounts();
+    state.f = Math.min(state.f + 1, 999999); save(); renderCounts(); queue('f');
     if (fx.children.length < 60) {
       const s = document.createElement('span');
       s.className = 'float-f'; s.textContent = 'F';
@@ -336,7 +344,7 @@
     payRespects();
   });
   $('#koden-btn').addEventListener('click', () => {
-    state.koden = Math.min(state.koden + 1, 999999); save(); renderCounts(); bell();
+    state.koden = Math.min(state.koden + 1, 999999); save(); renderCounts(); bell(); queue('koden');
     const q = t('koden');
     toast(q[state.koden % q.length]);
   });
@@ -352,50 +360,109 @@
 
   /* ---------- tribute wall ---------- */
   const wall = $('#wall');
-  function noteEl(name, msg, mineIdx) {
+  let serverTributes = [];
+  const recent = [];
+
+  function ago(ts) {
+    const sec = Math.max(0, Math.round((Date.now() - ts) / 1000));
+    if (!ts || sec < 45) return t('now');
+    const rtf = new Intl.RelativeTimeFormat(state.lang, { numeric: 'auto' });
+    if (sec < 3600) return rtf.format(-Math.round(sec / 60), 'minute');
+    if (sec < 86400) return rtf.format(-Math.round(sec / 3600), 'hour');
+    return rtf.format(-Math.round(sec / 86400), 'day');
+  }
+
+  function noteEl(name, msg, ts, mineId) {
     const a = document.createElement('article');
-    a.className = mineIdx === null ? 'note' : 'note mine';
+    a.className = mineId ? 'note mine' : 'note';
     a.style.setProperty('--tilt', ((msg.length % 5) - 2) * .6 + 'deg');
     const p = document.createElement('p');
     p.className = 'note-msg'; p.textContent = msg;
     const by = document.createElement('p');
     by.className = 'note-by';
-    if (mineIdx !== null) {
+    if (mineId) {
       const tag = document.createElement('span');
       tag.className = 'tag'; tag.textContent = t('you');
       by.append(tag);
       const del = document.createElement('button');
       del.type = 'button'; del.className = 'del'; del.textContent = '×';
       del.setAttribute('aria-label', t('del'));
-      del.addEventListener('click', () => { state.notes.splice(mineIdx, 1); save(); renderWall(); });
+      del.addEventListener('click', () => removeTribute(mineId));
       a.append(del);
     }
-    by.append('— ' + (name || t('anon')));
+    by.append('— ' + (name || t('anon')) + (ts ? ' · ' + ago(ts) : ''));
     a.append(p, by);
     return a;
   }
   function renderWall() {
     const frag = document.createDocumentFragment();
-    state.notes.forEach((n, i) => frag.append(noteEl(n.n, n.m, i)));
-    SEED.forEach((s) => frag.append(noteEl(s.n[state.lang], s.m[state.lang], null)));
+    const seen = new Set(serverTributes.map((x) => x.id));
+    const live = recent.filter((x) => !seen.has(x.id)).concat(serverTributes);
+    const mine = new Set(state.mine.map((x) => x.id));
+    live.forEach((x) => frag.append(noteEl(x.n, x.m, x.t, mine.has(x.id) ? x.id : '')));
+    if (!live.length) {
+      const empty = document.createElement('p');
+      empty.className = 'small'; empty.textContent = t('wallEmpty');
+      frag.append(empty);
+    }
+    SEED.forEach((s) => frag.append(noteEl(s.n[state.lang], s.m[state.lang], 0, '')));
     wall.replaceChildren(frag);
   }
-  const nameIn = $('#t-name'), msgIn = $('#t-msg');
+  const nameIn = $('#t-name'), msgIn = $('#t-msg'), sendBtn = $('#tribute-form button[type="submit"]');
   msgIn.addEventListener('input', () => { $('#msg-count').textContent = Array.from(msgIn.value).length; });
-  let lastPost = 0;
-  $('#tribute-form').addEventListener('submit', (e) => {
+  let lastPost = 0, posting = false;
+  $('#tribute-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const now = Date.now();
-    if (now - lastPost < COOLDOWN_MS) { toast(t('fast')); return; }
+    if (posting) return;
     const m = clean(msgIn.value, MSG_MAX);
     if (!m) { toast(t('empty')); msgIn.focus(); return; }
-    lastPost = now;
-    state.notes.unshift({ n: clean(nameIn.value, NAME_MAX), m });
-    state.notes.length = Math.min(state.notes.length, MAX_NOTES);
-    save(); renderWall();
-    msgIn.value = ''; $('#msg-count').textContent = '0';
-    toast(t('noteOk')); bell(); confetti(50, PINKS);
+    if (!API) { toast(t('noServer')); return; }
+    if (Date.now() - lastPost < COOLDOWN_MS) { toast(t('fast')); return; }
+    const n = clean(nameIn.value, NAME_MAX);
+    posting = true; sendBtn.disabled = true;
+    try {
+      const res = await fetch(`${API}/api/tributes`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit',
+        body: JSON.stringify({ name: n, msg: m })
+      });
+      if (res.status === 201) {
+        const d = await res.json();
+        const mine = cleanMine(d);
+        if (!mine) throw new Error('shape');
+        state.mine.unshift(mine);
+        state.mine.length = Math.min(state.mine.length, MAX_NOTES);
+        save();
+        recent.unshift({ id: mine.id, n, m, t: Date.now() });
+        recent.length = Math.min(recent.length, 5);
+        lastPost = Date.now();
+        msgIn.value = ''; $('#msg-count').textContent = '0';
+        renderWall();
+        toast(t('noteOk')); bell(); confetti(50, PINKS);
+        setTimeout(pollState, 1500);
+      } else {
+        const key = { 422: 'rejected', 429: 'fast', 409: 'dup', 400: 'empty' }[res.status] || 'tributeFail';
+        toast(t(key));
+      }
+    } catch (_) {
+      toast(t('tributeFail'));
+    } finally {
+      posting = false; sendBtn.disabled = false;
+    }
   });
+
+  async function removeTribute(id) {
+    const mine = state.mine.find((x) => x.id === id);
+    if (!mine || !API) return;
+    try {
+      const res = await fetch(`${API}/api/tributes/${id}`, { method: 'DELETE', headers: { 'X-Delete-Token': mine.token }, credentials: 'omit' });
+      if (res.status !== 200 && res.status !== 404) { toast(t('tributeFail')); return; }
+    } catch (_) { toast(t('tributeFail')); return; }
+    state.mine = state.mine.filter((x) => x.id !== id);
+    serverTributes = serverTributes.filter((x) => x.id !== id);
+    const at = recent.findIndex((x) => x.id === id);
+    if (at >= 0) recent.splice(at, 1);
+    save(); renderWall();
+  }
 
   /* ---------- reincarnation ---------- */
   const card = $('#reborn-card'), truck = $('#truck');
@@ -476,17 +543,145 @@
     $('#lang-ja').setAttribute('aria-pressed', String(lang === 'ja'));
     $('#lang-en').setAttribute('aria-pressed', String(lang === 'en'));
     flowerBtns.forEach((b, i) => { const l = t('flower')[i]; b.title = l; b.setAttribute('aria-label', l); });
-    renderCounts(); renderWall(); renderShare();
+    renderCounts(); renderWall(); renderShare(); renderStats(true); renderNet();
     if (termStarted) typeTerminal(true);
   }
   $('#lang-ja').addEventListener('click', () => { applyLang('ja'); save(); });
   $('#lang-en').addEventListener('click', () => { applyLang('en'); save(); });
 
+  /* ---------- shared totals / tributes (Azure Functions API) ---------- */
+  const apiMeta = document.querySelector('meta[name="api-base"]');
+  const API = apiMeta && /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(apiMeta.content) ? apiMeta.content : '';
+  const STAT_KEYS = ['visit', 'candle', 'flower', 'f', 'koden', 'tribute'];
+  const statEl = Object.fromEntries(STAT_KEYS.map((k) => [k, $('#g-' + k)]));
+  const server = { candle: 0, f: 0, koden: 0, visit: 0, tribute: 0, flowers: Array(FLOWERS.length).fill(0) };
+  const emptyDeltas = () => ({ candle: 0, f: 0, koden: 0, visit: 0, flowers: Array(FLOWERS.length).fill(0) });
+  const pending = emptyDeltas();
+  let inflight = emptyDeltas();
+  const shown = {};
+  const tweens = {};
+  let loaded = false, online = false, flushTimer = 0, flushing = false, failures = 0, pollTimer = 0, pollFails = 0;
+  const nfCache = {};
+  const fmt = (n) => (nfCache[state.lang] = nfCache[state.lang] || new Intl.NumberFormat(state.lang === 'en' ? 'en-US' : 'ja-JP')).format(n);
+  const sum = (a) => a.reduce((x, y) => x + y, 0);
+  const total = (d) => d.candle + d.f + d.koden + d.visit + sum(d.flowers);
+
+  function queue(field, idx) {
+    if (field === 'flowers') pending.flowers[idx]++; else pending[field]++;
+    renderStats();
+    scheduleFlush(FLUSH_MS);
+  }
+  function scheduleFlush(ms) {
+    if (!API || flushTimer) return;
+    flushTimer = setTimeout(() => { flushTimer = 0; flush(false); }, ms);
+  }
+  // Takes up to MAX_BATCH per field out of `pending`; the rest stays queued.
+  function takeBatch() {
+    const b = emptyDeltas();
+    for (const k of ['candle', 'f', 'koden', 'visit']) { b[k] = Math.min(pending[k], k === 'visit' ? 1 : MAX_BATCH); pending[k] -= b[k]; }
+    pending.flowers.forEach((v, i) => { b.flowers[i] = Math.min(v, MAX_BATCH); pending.flowers[i] -= b.flowers[i]; });
+    return b;
+  }
+  async function flush(keepalive) {
+    if (!API || flushing || !total(pending)) return;
+    flushing = true;
+    const body = takeBatch();
+    inflight = body;
+    let retry = false;
+    try {
+      const res = await fetch(`${API}/api/actions`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+        keepalive, credentials: 'omit'
+      });
+      retry = res.status === 429 || res.status === 404 || res.status === 408 || res.status >= 500;
+    } catch (_) { retry = true; }
+    inflight = emptyDeltas();
+    if (retry) {
+      failures++;
+      for (const k of ['candle', 'f', 'koden', 'visit']) pending[k] = Math.min(pending[k] + body[k], 5000);
+      body.flowers.forEach((v, i) => { pending.flowers[i] = Math.min(pending.flowers[i] + v, 5000); });
+    } else failures = 0;
+    flushing = false;
+    if (total(pending)) scheduleFlush(retry ? Math.min(60000, FLUSH_MS * 2 ** failures) : FLUSH_MS);
+  }
+
+  function showStat(k, v) {
+    const el = statEl[k];
+    cancelAnimationFrame(tweens[k]);
+    const from = shown[k] || 0;
+    shown[k] = v;
+    if (reduceMotion || v - from < 3 || v < from) { el.textContent = fmt(v); return; }
+    const t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / 600);
+      el.textContent = fmt(Math.round(from + (v - from) * (1 - (1 - p) ** 3)));
+      if (p < 1) tweens[k] = requestAnimationFrame(step);
+    };
+    tweens[k] = requestAnimationFrame(step);
+  }
+  function renderStats(force) {
+    if (!loaded) { STAT_KEYS.forEach((k) => { statEl[k].textContent = '–'; }); return; }
+    const own = (f) => pending[f] + inflight[f];
+    const cur = {
+      visit: server.visit + own('visit'),
+      candle: server.candle + own('candle'),
+      flower: sum(server.flowers) + sum(pending.flowers) + sum(inflight.flowers),
+      f: server.f + own('f'),
+      koden: (server.koden + own('koden')) * KODEN_UNIT,
+      tribute: server.tribute
+    };
+    for (const k of STAT_KEYS) {
+      const next = Math.max(shown[k] || 0, cur[k]);
+      if (force || next !== shown[k]) { if (force) shown[k] = next; showStat(k, next); }
+    }
+  }
+  function renderNet() {
+    const el = $('#net');
+    const key = !API ? 'netOff' : online ? 'netLive' : loaded || pollFails ? 'netOff' : 'netWait';
+    el.textContent = t(key);
+    el.dataset.state = online ? 'live' : 'off';
+  }
+
+  const num = (v) => (Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
+  function applyState(data) {
+    const tt = data && data.totals;
+    if (!tt || typeof tt !== 'object') throw new Error('shape');
+    for (const k of ['candle', 'f', 'koden', 'visit', 'tribute']) server[k] = num(tt[k]);
+    server.flowers = FLOWERS.map((_, i) => num(Array.isArray(tt.flowers) ? tt.flowers[i] : 0));
+    serverTributes = (Array.isArray(data.tributes) ? data.tributes : []).slice(0, 50).map((x) => {
+      if (!x || typeof x !== 'object' || !ID_RE.test(x.id)) return null;
+      const m = clean(x.m, MSG_MAX);
+      return m ? { id: x.id, n: clean(x.n, NAME_MAX), m, t: num(x.t) } : null;
+    }).filter(Boolean);
+    const cutoff = Date.now() - 60000;
+    for (let i = recent.length - 1; i >= 0; i--) if (recent[i].t < cutoff) recent.splice(i, 1);
+    loaded = true;
+    renderStats(); renderWall();
+  }
+  async function pollState() {
+    clearTimeout(pollTimer);
+    if (!API) return;
+    try {
+      const res = await fetch(`${API}/api/state`, { credentials: 'omit' });
+      if (!res.ok) throw new Error(String(res.status));
+      applyState(await res.json());
+      pollFails = 0; online = true;
+    } catch (_) { pollFails++; online = false; }
+    renderNet();
+    if (!document.hidden) pollTimer = setTimeout(pollState, Math.min(60000, 15000 * 2 ** Math.min(pollFails, 2)) + Math.random() * 5000);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) flush(true); else pollState();
+  });
+  window.addEventListener('pagehide', () => flush(true));
+
   /* ---------- reset ---------- */
   $('#reset').addEventListener('click', () => {
     if (!window.confirm(t('resetConfirm'))) return;
     try { localStorage.removeItem(KEY); } catch (_) { /* ignore */ }
-    Object.assign(state, defaults(state.lang));
+    const visited = state.visited;
+    Object.assign(state, defaults(state.lang), { visited });
+    save();
     renderAltar(); renderCounts(); renderWall();
     toast(t('resetDone'));
   });
@@ -496,4 +691,8 @@
   startLoop();
   renderAltar();
   applyLang(state.lang);
+  if (API) {
+    if (!state.visited) { state.visited = true; save(); pending.visit = 1; scheduleFlush(1500); }
+    pollState();
+  }
 })();
