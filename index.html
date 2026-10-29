@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>GitHub Copilot Harness 追悼式場 | R.I.P.</title>
+<meta name="description" content="GitHub Copilot Harness は Microsoft Copilot harness に改名しました。旧名を偲ぶ、非公式パロディ追悼サイト。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GitHub Copilot Harness 追悼式場 | R.I.P.">
+<meta property="og:description" content="GitHub Copilot Harness は Microsoft Copilot harness に改名しました。ろうそくを灯して、旧名を偲びましょう。">
+<meta property="og:url" content="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://srohoman-bot.github.io/GitHub-Copilot-Harness-/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">本文へ移動</a>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="fx" class="fx" aria-hidden="true"></div>
+<div id="truck" class="truck" aria-hidden="true">🚛💨</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<header class="top">
+  <span class="brand" data-i18n="brand">🕯 追悼式場</span>
+  <div class="ctrl">
+    <div class="lang" role="group" aria-label="言語 / Language">
+      <button id="lang-ja" type="button" lang="ja" aria-pressed="true">日本語</button>
+      <button id="lang-en" type="button" lang="en" aria-pressed="false">English</button>
+    </div>
+    <button id="sound" class="icon" type="button" aria-pressed="false" aria-label="お鈴の音 オン/オフ" data-i18n-attr="aria-label:sound_label"><span id="sound-ico" aria-hidden="true">🔇</span></button>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <section class="hero" aria-labelledby="h-title">
+    <p class="eyebrow" data-i18n="eyebrow">訃報　2026年、改名により逝去</p>
+    <div class="stone" id="stone">
+      <div class="rip" aria-hidden="true">R.I.P.</div>
+      <h1 id="h-title" class="name">GitHub Copilot Harness</h1>
+      <p class="dates" data-i18n="dates">生年不詳 — 2026年（改名）</p>
+      <p class="epitaph" data-i18n="epitaph">名前は変わった。中身は…たぶん変わらない。</p>
+    </div>
+    <div class="ground" aria-hidden="true"></div>
+    <p class="cta">
+      <a class="btn" href="#offer" data-i18n="cta1">手を合わせる</a>
+      <a class="btn ghost" href="#words" data-i18n="cta2">最期の言葉を聞く</a>
+      <button id="poke" class="btn ghost" type="button" data-i18n="poke">墓石をつつく</button>
+    </p>
+    <p class="news"><span data-i18n="news_pre">死因：</span> <a href="https://www.microsoft.com/en-us/copilot/blog/" target="_blank" rel="noopener noreferrer">The GitHub Copilot harness is now the Microsoft Copilot harness | Microsoft Copilot Blog</a></p>
+  </section>
+
+  <section id="words" class="panel" aria-labelledby="words-h">
+    <h2 id="words-h" data-i18n="words_h">最期の言葉</h2>
+    <p class="lead" data-i18n="words_p">故人は最期に、ターミナルでこう打ったとされている。</p>
+    <figure class="term">
+      <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>bash — harness</span></div>
+      <pre id="term-out" class="term-out" aria-live="off"></pre>
+    </figure>
+  </section>
+
+  <section id="life" class="panel" aria-labelledby="life-h">
+    <h2 id="life-h" data-i18n="life_h">故人の生涯</h2>
+    <p class="lead" data-i18n="life_p">※ 脚色あり。パロディです。</p>
+    <ol class="timeline">
+      <li><h3 data-i18n="tl1_t">誕生</h3><p data-i18n="tl1_p">「Copilot にも手綱が要る」と誰かが言った。ハーネス（harness）は、そうして生まれた。</p></li>
+      <li><h3 data-i18n="tl2_t">活躍</h3><p data-i18n="tl2_p">黙々と手綱を握り、AI が暴走しないよう支え続けた。感謝されることは少なかった。</p></li>
+      <li><h3 data-i18n="tl3_t">GitHub 時代</h3><p data-i18n="tl3_p">Octocat とともに歩んだ日々。名前の頭には、いつも GitHub がついていた。</p></li>
+      <li><h3 data-i18n="tl4_t">改名</h3><p data-i18n="tl4_p">ある日、ブログが公開された。「Microsoft Copilot harness」。本人より先に、タイムラインが知っていた。</p></li>
+      <li><h3 data-i18n="tl5_t">そして今</h3><p data-i18n="tl5_p">名前は変わっても、ハーネスは今日も手綱を握っている。故人は、実は生きている。</p></li>
+    </ol>
+  </section>
+
+  <section id="offer" class="panel" aria-labelledby="offer-h">
+    <h2 id="offer-h" data-i18n="offer_h">お供え</h2>
+    <p class="lead" data-i18n="offer_p">ボタンを押して、旧名を偲びましょう。</p>
+    <p class="small" data-i18n="local_note">※ 記録はこの端末のブラウザ内にのみ保存されます。</p>
+
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="candle_h">献灯</h3>
+        <p data-i18n="candle_p">ろうそくを灯して、旧名の冥福を祈る。最大7本。</p>
+        <div id="candles" class="candles" aria-hidden="true"></div>
+        <div class="row">
+          <button id="candle-btn" class="btn" type="button" data-i18n="candle_btn">灯す</button>
+          <button id="candle-off" class="btn ghost" type="button" data-i18n="candle_off">吹き消す</button>
+        </div>
+        <p class="count"><span data-i18n="candle_count">灯した数：</span> <b id="c-candle">0</b> / 7</p>
+      </article>
+
+      <article class="card">
+        <h3 data-i18n="flower_h">献花・お供え物</h3>
+        <p data-i18n="flower_p">好きなものを選んで供えてください。</p>
+        <div id="flower-btns" class="row wrap-row"></div>
+        <div id="altar" class="altar" role="img" aria-label="お供え台" data-i18n-attr="aria-label:altar_label"></div>
+        <p class="count"><span data-i18n="flower_count">供えた花：</span> <b id="c-flower">0</b></p>
+      </article>
+
+      <article class="card">
+        <h3 data-i18n="f_h">Press F to pay respects</h3>
+        <p data-i18n="f_p">キーボードの F キーでも敬意を表せます。</p>
+        <div class="row"><button id="f-btn" class="btn big-f" type="button" aria-label="敬意を表す" data-i18n-attr="aria-label:f_btn_label">F</button></div>
+        <p class="count"><span data-i18n="f_count">F数：</span> <b id="c-f">0</b></p>
+      </article>
+
+      <article class="card">
+        <h3 data-i18n="koden_h">香典</h3>
+        <p data-i18n="koden_p">1口 = 1,000,000 トークン。※請求は発生しません。</p>
+        <div class="row"><button id="koden-btn" class="btn" type="button">💴 <span data-i18n="koden_btn">香典を包む</span></button></div>
+        <p class="count"><span data-i18n="koden_total">香典合計：</span> <b id="c-koden">0</b> tokens</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="tribute" class="panel" aria-labelledby="tribute-h">
+    <h2 id="tribute-h" data-i18n="tribute_h">弔辞を残す</h2>
+    <p class="lead" data-i18n="tribute_p">故人への言葉をどうぞ。投稿はこの端末のブラウザ内にのみ保存され、他の人には送信されません。</p>
+    <form id="tribute-form" class="form" autocomplete="off">
+      <label for="t-name" data-i18n="name_label">お名前（任意）</label>
+      <input id="t-name" type="text" maxlength="24" placeholder="匿名の参列者" data-i18n-attr="placeholder:name_ph">
+      <label for="t-msg" data-i18n="msg_label">弔辞</label>
+      <textarea id="t-msg" rows="3" maxlength="140" required placeholder="（例）ありがとう、GitHub Copilot Harness。" data-i18n-attr="placeholder:msg_ph"></textarea>
+      <div class="row between">
+        <span class="small"><span id="msg-count">0</span> / 140</span>
+        <button class="btn" type="submit" data-i18n="send">弔辞を捧げる</button>
+      </div>
+    </form>
+    <h3 class="wall-h" data-i18n="wall_h">弔辞の壁</h3>
+    <p class="small" data-i18n="wall_note">※ 一部の弔辞はネタ（創作）です。</p>
+    <div id="wall" class="wall"></div>
+  </section>
+
+  <section id="reborn" class="panel" aria-labelledby="reborn-h">
+    <h2 id="reborn-h" data-i18n="reborn_h">転生</h2>
+    <p class="lead" data-i18n="reborn_p">実は、故人は転生しただけなのかもしれない。</p>
+    <div id="reborn-card" class="reborn-card" data-reborn="false">
+      <div class="before">
+        <p class="small" data-i18n="reborn_before">ここに眠る</p>
+        <p class="big-name">GitHub Copilot Harness</p>
+      </div>
+      <div class="after">
+        <p class="small" data-i18n="reborn_after">転生したら Microsoft だった件</p>
+        <p class="big-name shine">Microsoft Copilot harness</p>
+      </div>
+      <button id="reborn-btn" class="btn" type="button">
+        <span class="to-new" data-i18n="reborn_btn">転生させる</span>
+        <span class="to-old" data-i18n="reborn_back">眠りに戻す</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="share" class="panel" aria-labelledby="share-h">
+    <h2 id="share-h" data-i18n="share_h">訃報を拡散する</h2>
+    <p class="lead" data-i18n="share_p">#GitHubCopilotHarness #RIP</p>
+    <div class="row wrap-row">
+      <a id="share-x" class="btn" href="https://x.com/" target="_blank" rel="noopener noreferrer" data-i18n="share_x">X に投稿</a>
+      <button id="share-copy" class="btn ghost" type="button" data-i18n="share_copy">リンクをコピー</button>
+      <button id="share-native" class="btn ghost" type="button" hidden data-i18n="share_native">共有…</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p data-i18n="foot_disclaimer">これは非公式のファンメイドによるパロディです。GitHub および Microsoft とは一切関係ありません。商標はそれぞれの所有者に帰属します。製品自体は健在で、変わったのは名前だけです。</p>
+  <p data-i18n="foot_security">Cookie・トラッカー・外部通信はありません（CSP で外部接続を遮断）。入力内容はあなたのブラウザの localStorage にのみ保存されます。</p>
+  <p><button id="reset" class="link" type="button" data-i18n="reset_btn">この端末の記録を消去する</button></p>
+</footer>
+</body>
+</html>
