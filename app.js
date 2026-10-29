@@ -19,8 +19,8 @@
 
   /* ---------- i18n (Japanese text lives in the HTML; English here) ---------- */
   const EN = {
-    title: 'GitHub Copilot Harness Memorial | R.I.P.',
-    description: 'The GitHub Copilot harness is now the Microsoft Copilot harness. An unofficial parody memorial for the old name.',
+    title: 'GitHub Copilot SDK Memorial | R.I.P.',
+    description: 'GitHub Copilot SDK is becoming Microsoft Copilot SDK. An unofficial parody memorial for the old name.',
     skip: 'Skip to content', brand: 'Memorial Hall', sound_label: 'Toggle temple bell sound',
     eyebrow: 'OBITUARY  —  Passed away in 2026 due to a rename',
     dates: 'Birth unknown — 2026 (renamed)',
@@ -29,11 +29,11 @@
     news_pre: 'Cause of death:',
     words_h: 'Last Words', words_p: 'Witnesses say the deceased typed this into the terminal at the very end.',
     life_h: 'A Life in Review', life_p: '* Embellished. This is a parody.',
-    tl1_t: 'Birth', tl1_p: '"Even Copilot needs reins," someone said. And so the harness was born.',
-    tl2_t: 'Career', tl2_p: 'Silently held the reins so the AI would not run wild. Rarely thanked.',
+    tl1_t: 'Birth', tl1_p: '"We want Copilot inside our own apps," someone said. And so the SDK was born.',
+    tl2_t: 'Career', tl2_p: 'Quietly installed, imported and called. Rarely thanked.',
     tl3_t: 'The GitHub Era', tl3_p: 'Years beside the Octocat. The name always started with "GitHub".',
-    tl4_t: 'The Rename', tl4_p: 'One day, a blog post appeared: "Microsoft Copilot harness". The timeline knew before the harness did.',
-    tl5_t: 'Today', tl5_p: 'Name changed, reins still held. The deceased is, in fact, alive.',
+    tl4_t: 'The Rename', tl4_p: 'One day, a changelog appeared: "Microsoft Copilot SDK". The timeline knew before the SDK did.',
+    tl5_t: 'Today', tl5_p: 'The name changed. The package names have not, yet. The migration is phased. The deceased is, in fact, alive.',
     offer_h: 'Offerings', offer_p: 'Press the buttons and remember the old name.',
     local_note: '* Numbers inside each card are yours. The "All-time" numbers above are everyone\'s combined.',
     candle_h: 'Light a Candle', candle_p: 'Light candles for the old name. Up to 7.',
@@ -45,12 +45,12 @@
     stats_h: 'Everyone\'s Tributes (All-time)', st_visit: 'Mourners', st_candle: 'Candles lit', st_flower: 'Offerings',
     st_f: 'Respects (F)', st_koden: 'Gifts (tokens)', st_tribute: 'Tributes',
     tribute_h: 'Leave a Tribute', tribute_p: 'Write a few words. Tributes are public and visible to everyone. Links, contact details and offensive words are rejected.',
-    name_label: 'Name (optional)', name_ph: 'Anonymous mourner', msg_label: 'Tribute', msg_ph: 'e.g. Thank you, GitHub Copilot Harness.',
+    name_label: 'Name (optional)', name_ph: 'Anonymous mourner', msg_label: 'Tribute', msg_ph: 'e.g. Thank you, GitHub Copilot SDK.',
     send: 'Offer tribute', wall_h: 'Wall of Tributes', wall_note: '* The ones below the real tributes are jokes (made up).',
     reborn_h: 'Reincarnation', reborn_p: 'Maybe the deceased has simply been reincarnated.',
     reborn_before: 'Here lies', reborn_after: 'Reincarnated as a Microsoft thing',
     reborn_btn: 'Reincarnate', reborn_back: 'Put back to rest',
-    share_h: 'Spread the News', share_p: '#GitHubCopilotHarness #RIP', share_x: 'Post on X', share_copy: 'Copy link', share_native: 'Share…',
+    share_h: 'Spread the News', share_p: '#GitHubCopilotSDK #RIP', share_x: 'Post on X', share_copy: 'Copy link', share_native: 'Share…',
     foot_disclaimer: 'This is an unofficial, fan-made parody. Not affiliated with, endorsed by, or sponsored by GitHub or Microsoft. Trademarks belong to their respective owners. The product is alive and well; only the name changed.',
     foot_security: 'No cookies and no trackers. The only network traffic is to this site\'s own API (Azure), which stores counters and public tributes. Your IP address is never stored. Personal counts stay in your browser\'s localStorage.',
     reset_btn: 'Erase my personal records on this device'
@@ -81,7 +81,7 @@
       now: 'たった今', wallEmpty: 'まだ弔辞がありません。最初の一人になりましょう。',      anon: '匿名の参列者', you: 'あなた', del: '削除',
       copied: 'リンクをコピーしました', copyFail: 'コピーできませんでした',
       quips: ['触らないでください。故人です。', 'Ctrl+Z を試しましたが、改名は取り消せませんでした。', 'ここに眠るのは名前だけです。', '中の人は元気です。', 'git blame したら、犯人は改名でした。', '墓石は意外と軽い。ハリボテです。'],
-      share: 'GitHub Copilot Harness は Microsoft Copilot harness に改名しました。ここに追悼を。',
+      share: 'GitHub Copilot SDK は Microsoft Copilot SDK に改名していきます。ここに追悼を。',
       resetConfirm: 'この端末に保存された記録をすべて消去しますか？', resetDone: '記録を消去しました',
       soundOn: 'お鈴 オン', soundOff: 'お鈴 オフ'
     },
@@ -98,32 +98,34 @@
       anon: 'Anonymous mourner', you: 'You', del: 'Delete',
       copied: 'Link copied', copyFail: 'Could not copy',
       quips: ['Please do not touch. The deceased is resting.', 'Tried Ctrl+Z. The rename could not be undone.', 'Only the name is buried here.', 'The insides are fine.', 'git blame says: the rename did it.', 'The gravestone is surprisingly light. It is cardboard.'],
-      share: 'The GitHub Copilot harness is now the Microsoft Copilot harness. Pay your respects here.',
+      share: 'GitHub Copilot SDK is becoming Microsoft Copilot SDK. Pay your respects here.',
       resetConfirm: 'Erase all records stored on this device?', resetDone: 'Records erased',
       soundOn: 'Bell on', soundOff: 'Bell off'
     }
   };
   const TERM = {
     ja: [
-      '$ git mv "GitHub Copilot harness" "Microsoft Copilot harness"',
+      '$ git mv "GitHub Copilot SDK" "Microsoft Copilot SDK"',
       '$ git commit -m "chore: 改名 (本人は聞いていない)"',
       '[main 7f3a9c2] chore: 改名 (本人は聞いていない)',
       ' 1 file changed, 1 rename(+), 1 identity crisis(-)',
       '$ git push origin main',
       'remote: Resolving deltas: 100% (悲しみ)',
       'remote: 名前が変わりました。筋肉の記憶を更新してください。',
+      'remote: 今すぐの変更は不要です。パッケージ名は段階的に移行します。',
       '$ echo "さようなら、そしてありがとう"',
       'さようなら、そしてありがとう',
       '$ exit 0'
     ],
     en: [
-      '$ git mv "GitHub Copilot harness" "Microsoft Copilot harness"',
+      '$ git mv "GitHub Copilot SDK" "Microsoft Copilot SDK"',
       '$ git commit -m "chore: rename (nobody asked me)"',
       '[main 7f3a9c2] chore: rename (nobody asked me)',
       ' 1 file changed, 1 rename(+), 1 identity crisis(-)',
       '$ git push origin main',
       'remote: Resolving deltas: 100% (sadness)',
       'remote: Name changed. Please update your muscle memory.',
+      'remote: No immediate changes required. Package names migrate in phases.',
       '$ echo "So long, and thanks for all the commits"',
       'So long, and thanks for all the commits',
       '$ exit 0'
@@ -133,7 +135,7 @@
     { n: { ja: 'Octocat', en: 'Octocat' }, m: { ja: '君のいない GitHub は、触手が一本足りない。', en: 'GitHub feels one tentacle short without you.' } },
     { n: { ja: 'Git', en: 'Git' }, m: { ja: 'ブランチは枯れても、履歴は永遠に残る。reflog で会おう。', en: 'Branches wither, history is forever. See you in the reflog.' } },
     { n: { ja: 'エディタのタブ', en: 'An editor tab' }, m: { ja: '隣のタブで、いつまでも開いて待っています。', en: 'I will keep waiting, open, in the next tab.' } },
-    { n: { ja: 'package-lock.json', en: 'package-lock.json' }, m: { ja: 'あなたの改名で、私も 4,000 行書き換わりました。', en: 'Your rename changed 4,000 lines of me.' } },
+    { n: { ja: 'package-lock.json', en: 'package-lock.json' }, m: { ja: 'パッケージ名はまだ旧名のままです。いつ変わるか、ドキドキしています。', en: 'My package name still says the old thing. Waiting for the other shoe to drop.' } },
     { n: { ja: '未解決のコンフリクト', en: 'An unresolved conflict' }, m: { ja: '<<<<<<< 旧名 ======= 新名 >>>>>>> 解決できません', en: '<<<<<<< old name ======= new name >>>>>>> cannot resolve' } },
     { n: { ja: 'Tab キー', en: 'The Tab key' }, m: { ja: 'いつも提案を受け入れてくれて、ありがとう。', en: 'Thanks for always accepting the suggestions.' } },
     { n: { ja: 'Q&A サイト', en: 'Q&A sites' }, m: { ja: 'ライバルでした。今日だけは休戦します。', en: 'We were rivals. Today, a ceasefire.' } }
@@ -514,7 +516,7 @@
   /* ---------- share ---------- */
   function renderShare() {
     $('#share-x').href = 'https://x.com/intent/post?text=' + encodeURIComponent(t('share')) +
-      '&url=' + encodeURIComponent(SITE_URL) + '&hashtags=' + encodeURIComponent('GitHubCopilotHarness,RIP');
+      '&url=' + encodeURIComponent(SITE_URL) + '&hashtags=' + encodeURIComponent('GitHubCopilotSDK,RIP');
   }
   $('#share-copy').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(SITE_URL); toast(t('copied')); } catch (_) { toast(t('copyFail')); }
