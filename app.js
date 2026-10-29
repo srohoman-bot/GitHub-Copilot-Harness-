@@ -213,19 +213,21 @@
   /* ---------- sky + confetti canvas ---------- */
   const cv = $('#sky'), ctx = cv.getContext('2d');
   let W = 0, H = 0, raf = 0;
-  const stars = [], petals = [], conf = [];
+  const stars = [], snow = [], conf = [];
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = window.innerWidth; H = window.innerHeight;
     cv.width = W * dpr; cv.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars.length = 0; petals.length = 0;
+    stars.length = 0; snow.length = 0;
     for (let i = 0, n = Math.round((W * H) / 9000); i < n; i++) {
       stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .3, p: Math.random() * 6.28, s: Math.random() * 2 + .5 });
     }
     if (!reduceMotion) {
-      for (let i = 0; i < 22; i++) {
-        petals.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 4 + 3, vy: Math.random() * .6 + .3, ph: Math.random() * 6.28 });
+      const flakes = Math.min(140, Math.max(50, Math.round((W * H) / 14000)));
+      for (let i = 0; i < flakes; i++) {
+        const depth = Math.random();
+        snow.push({ x: Math.random() * W, y: Math.random() * H, r: 1 + depth * 2.8, vy: .3 + depth * .9, ph: Math.random() * 6.28, a: .35 + depth * .55 });
       }
     }
     draw(performance.now());
@@ -237,12 +239,13 @@
       ctx.fillStyle = '#fff';
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
     }
-    ctx.fillStyle = '#ffc2d9';
-    for (const p of petals) {
-      p.y += p.vy; p.x += Math.sin(ts / 900 + p.ph) * .6;
-      if (p.y > H + 10) { p.y = -10; p.x = Math.random() * W; }
-      ctx.globalAlpha = .6;
-      ctx.beginPath(); ctx.ellipse(p.x, p.y, p.r, p.r * .55, p.ph + ts / 1500, 0, 6.283); ctx.fill();
+    ctx.fillStyle = '#eaf6ff';
+    for (const p of snow) {
+      p.y += p.vy; p.x += Math.sin(ts / 1200 + p.ph) * .35;
+      if (p.y > H + 6) { p.y = -6; p.x = Math.random() * W; }
+      if (p.x > W + 6) p.x = -6; else if (p.x < -6) p.x = W + 6;
+      ctx.globalAlpha = p.a;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
     }
     for (let i = conf.length - 1; i >= 0; i--) {
       const c = conf[i];
@@ -270,7 +273,7 @@
     if (conf.length > 400) conf.splice(0, conf.length - 400);
   }
   const BRAND_COLORS = ['#f25022', '#7fba00', '#00a4ef', '#ffb900'];
-  const PINKS = ['#ffc2d9', '#ffe0ec', '#ff9ec2'];
+  const SNOW_COLORS = ['#ffffff', '#dff3ff', '#bfe6ff'];
   window.addEventListener('resize', resize);
   document.addEventListener('visibilitychange', startLoop);
 
@@ -439,7 +442,7 @@
         lastPost = Date.now();
         msgIn.value = ''; $('#msg-count').textContent = '0';
         renderWall();
-        toast(t('noteOk')); bell(); confetti(50, PINKS);
+        toast(t('noteOk')); bell(); confetti(50, SNOW_COLORS);
         setTimeout(pollState, 1500);
       } else {
         const key = { 422: 'rejected', 429: 'fast', 409: 'dup', 400: 'empty' }[res.status] || 'tributeFail';

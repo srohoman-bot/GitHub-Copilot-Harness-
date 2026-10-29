@@ -25,8 +25,8 @@ const items = [
   ['icon-bell-on', ICON + 'a Japanese temple bell (orin) ringing, with golden sound waves'],
   ['icon-bell-off', ICON + 'a Japanese temple singing bowl (orin) with a bold red circle-and-diagonal-slash "no" prohibition symbol overlaid in front of it, silent'],
   ['icon-truck', ICON + 'a cute chubby kawaii delivery truck speeding fast with motion lines and sparkles, no people'],
-  ['hero-bg', 'A serene wide dusk scene of a quiet Japanese memorial garden: stone lanterns glowing softly, drifting cherry blossom petals, mist, a large pale moon, deep navy and indigo palette, painterly, lots of dark empty space in the center for overlaid content. No text, no people.', '16:9'],
-  ['og', 'A cute 3D rendered gravestone with no inscription, surrounded by lit candles, flowers and floating cherry blossom petals, a tiny glowing terminal prompt cursor symbol above it, deep navy night background with stars, warm candlelight glow, centered composition. No text, no watermark.', '16:9']
+  ['hero-bg', 'A serene wide dusk scene of a quiet Japanese memorial garden: stone lanterns glowing softly, snow gently falling and lightly covering the ground, mist, a large pale moon, deep navy and indigo palette, painterly, lots of dark empty space in the center for overlaid content. No text, no people.', '16:9'],
+  ['og', 'A cute 3D rendered gravestone with no inscription, surrounded by lit candles, flowers and softly falling snow, a tiny glowing terminal prompt cursor symbol above it, deep navy night background with stars, warm candlelight glow, centered composition. No text, no watermark.', '16:9']
 ];
 
 const only = process.argv.slice(2).filter((a) => !a.startsWith('--'));
