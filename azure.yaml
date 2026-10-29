@@ -1,6 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 name: github-copilot-harness-memorial
 services:
+  web:
+    project: ./web
+    language: js
+    host: staticwebapp
+    dist: .
   api:
     project: ./api
     language: js

@@ -8,7 +8,7 @@
     return;
   }
 
-  const SITE_URL = 'https://srohoman-bot.github.io/GitHub-Copilot-Harness-/';
+  const SITE_URL = 'https://wonderful-stone-0f390da0f.4.azurestaticapps.net/';
   const KEY = 'ghch.v1';
   const MAX_NOTES = 20, NAME_MAX = 24, MSG_MAX = 140, COOLDOWN_MS = 20000;
   const FLUSH_MS = 5000, MAX_BATCH = 100, ID_RE = /^\d{13}-[0-9a-f]{6}$/;

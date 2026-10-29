@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const MODEL = 'gemini-nano-banana-2.1';
 const ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
-const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
+const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'web', 'assets');
 const KEY = process.env.GEMINI_API_KEY;
 if (!KEY) { console.error('GEMINI_API_KEY is not set'); process.exit(1); }
 

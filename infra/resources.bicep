@@ -1,7 +1,7 @@
 param location string
 param tags object
 param environmentName string
-param allowedOrigins string
+param extraOrigins string
 
 var token = toLower(uniqueString(subscription().id, environmentName, location))
 var storageName = 'st${token}'
@@ -85,6 +85,19 @@ resource plan 'Microsoft.Web/serverfarms@2024-04-01' = {
   properties: { reserved: true }
 }
 
+resource web 'Microsoft.Web/staticSites@2023-12-01' = {
+  name: 'stapp-${token}'
+  location: location
+  tags: union(tags, { 'azd-service-name': 'web' })
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
+  properties: {}
+}
+
+var allowedOrigins = join(filter(concat(['https://${web.properties.defaultHostname}'], split(extraOrigins, ',')), o => !empty(o)), ',')
+
 resource api 'Microsoft.Web/sites@2024-04-01' = {
   name: 'func-api-${token}'
   location: location
@@ -151,3 +164,4 @@ resource tableAccess 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 
 output apiUrl string = 'https://${api.properties.defaultHostName}'
 output apiName string = api.name
+output webUrl string = 'https://${web.properties.defaultHostname}'

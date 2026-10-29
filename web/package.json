@@ -1,0 +1,6 @@
+{
+  "name": "ghch-memorial-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static frontend deployed to Azure Static Web Apps"
+}
